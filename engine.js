@@ -2,42 +2,57 @@
   'use strict';
   const WIDTH = 900, GRAVITY = 1500, JUMP = 690, SPEED = 265;
   const levels = [
-    {name:'The Audition', color:'#59d9e8', acidSpeed:5.5, start:0, ends:[12,0,13,1], spurs:[4,8,6]},
-    {name:'Steel and Beak', color:'#f7b35c', acidSpeed:6, start:14, ends:[1,14,0,13], spurs:[9,5,8]},
-    {name:'The Foundry', color:'#ff7964', acidSpeed:6.5, start:0, ends:[14,2,15,0], spurs:[5,10,7]},
-    {name:'Toxic Circuit', color:'#b0ed74', acidSpeed:7, start:15, ends:[0,14,1,15], spurs:[10,4,9]},
-    {name:'Ghost Frequency', color:'#c39aff', acidSpeed:7.5, start:1, ends:[15,0,16,2], spurs:[6,10,5]},
-    {name:'Cryogenic Chamber', color:'#91c9ff', acidSpeed:8, start:16, ends:[2,15,0,16], spurs:[11,6,9]},
-    {name:'No Commercial Breaks', color:'#ff89ba', acidSpeed:8.5, start:0, ends:[16,1,17,0,16], spurs:[5,11,8]},
-    {name:'The Grand Finale', color:'#ffda73', acidSpeed:9, start:17, ends:[0,16,1,17,0], spurs:[12,6,10]}
+    {name:'The Audition', color:'#59d9e8', acidSpeed:5.5,
+      path:[[0,0],[6,0],[12,3],[28,3],[24,5],[16,7],[8,7],[4,9],[12,11],[22,11],[30,13]],
+      detours:[{at:[4,0],path:[[5,1],[7,2]]},{at:[20,3],path:[[19,4],[17,5]]},{at:[12,11],path:[[13,12],[15,13]]}]},
+    {name:'Steel and Beak', color:'#f7b35c', acidSpeed:6,
+      path:[[0,0],[4,0],[5,1],[4,2],[5,3],[4,4],[5,5],[8,5],[20,5],[21,6],[20,7],[21,8],[20,9],[21,10],[20,11],[30,11],[29,12],[30,13],[29,14],[30,15],[26,15],[18,16],[8,16]],
+      detours:[{at:[4,2],path:[[3,3],[1,4]]},{at:[14,5],path:[[15,6],[17,7],[19,8]]},{at:[26,11],path:[[25,12],[23,13]]}]},
+    {name:'The Foundry', color:'#ff7964', acidSpeed:6.5,
+      path:[[0,0],[8,4],[16,1],[28,7],[24,8],[20,9],[14,10],[2,13]],
+      detours:[{at:[6,3],path:[[5,4],[3,5]]},{at:[20,3],path:[[19,4],[17,5]]},{at:[16,10],path:[[17,11],[19,12]]}]},
+    {name:'Toxic Circuit', color:'#b0ed74', acidSpeed:7,
+      path:[[0,0],[8,0],[20,6],[30,6],[26,8],[14,8],[8,5],[16,5],[24,9],[10,12],[2,12]],
+      detours:[{at:[4,0],path:[[3,1],[1,2]]},{at:[26,8],path:[[27,9],[29,10]]},{at:[10,12],path:[[11,13],[13,14]]}]},
+    {name:'Ghost Frequency', color:'#c39aff', acidSpeed:7.5,
+      path:[[0,0],[6,0,150],[10,2,150],[14,1,150],[20,4,150],[24,2,150],[30,5,150],[26,6,150],[22,7,150],[18,6,150],[14,8,150],[10,9,150],[6,10,150],[2,11,150]],
+      detours:[{at:[4,0],path:[[5,1],[7,2]]},{at:[18,3],path:[[17,4],[15,5]]},{at:[22,7],path:[[23,8],[25,9]]}]},
+    {name:'Cryogenic Chamber', color:'#91c9ff', acidSpeed:8,
+      path:[[30,0],[24,0],[18,3],[28,3],[30,4],[26,6],[12,6],[8,8],[16,8],[26,10],[30,12],[16,12],[8,13],[0,13]],
+      detours:[{at:[26,0],path:[[27,1],[29,2]]},{at:[18,6],path:[[17,7],[15,8]]},{at:[22,12],path:[[23,13],[25,14]]}]},
+    {name:'No Commercial Breaks', color:'#ff89ba', acidSpeed:8.5,
+      path:[[0,0],[6,0],[14,4],[22,2],[30,6],[34,6],[26,10],[18,8],[10,12],[2,12],[8,15],[20,15],[30,17]],
+      detours:[{at:[4,0],path:[[3,1],[1,2]]},{at:[26,4],path:[[25,5],[23,6]]},{at:[20,15],path:[[19,16],[17,17],[15,18]]}]},
+    {name:'The Grand Finale', color:'#ffda73', acidSpeed:9,
+      path:[[0,0],[10,0],[18,4],[26,1],[34,5],[30,7],[22,7],[14,11],[6,8],[0,11],[8,15],[18,12],[28,16],[34,18],[26,20],[12,20],[4,22]],
+      detours:[{at:[6,0],path:[[7,1],[9,2]]},{at:[30,7],path:[[31,8],[33,9]]},{at:[6,14],path:[[5,15],[3,16],[1,17]]}]}
   ];
   const overlap = (a,b) => a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;
   function createGame(index, score = 0) {
-    const level = levels[index], height = (level.ends.length-1)*315+400;
-    const width = (Math.max(level.start,...level.ends)+1)*260+270;
-    const route=[], branches=[], keys=[], gates=[];
-    const platform=(column,row)=>({x:185+column*260,y:height-100-row*105,w:210,h:18});
-    let column=level.start;
-    for(let tier=0;tier<level.ends.length;tier++) {
-      if(tier)for(let step=1;step<=2;step++) {
-        const stair=platform(column,(tier-1)*3+step);
-        stair.x+=Math.sign(column-(tier>1?level.ends[tier-2]:level.start))*130;
-        route.push(stair);
-      }
-      const end=level.ends[tier], direction=Math.sign(end-column);
-      for(;;column+=direction) {
-        route.push(platform(column,tier*3));
-        if(tier<3 && column===level.spurs[tier]) {
-          const shelves=[platform(column,tier*3+1),platform(column+direction,tier*3+2)];
-          shelves.forEach(p=>{p.branch=true;p.x+=direction*130;});
-          branches.push({id:tier,anchor:route.length-1,platforms:shelves});
-          keys.push({id:tier,x:shelves[1].x+85,y:shelves[1].y-46,w:26,h:30,collected:false});
-          const next=platform(column+direction*2,tier*3);
-          gates.push({id:tier,x:next.x+(direction>0?145:35),y:next.y-100,w:18,h:100,open:false});
-        }
-        if(column===end)break;
-      }
+    const level = levels[index];
+    const points=[...level.path,...level.detours.flatMap(b=>b.path)];
+    const height=Math.max(...points.map(p=>p[1]))*105+400;
+    const width=Math.max(...points.map(p=>p[0]))*130+580;
+    const route=[], branches=[], keys=[], gates=[], coordinates=[];
+    const platform=([column,row,w=210])=>({x:185+column*130,y:height-100-row*105,w,h:18});
+    coordinates.push(level.path[0]);
+    for(let i=1;i<level.path.length;i++) {
+      const a=level.path[i-1],b=level.path[i];
+      const steps=Math.max(Math.ceil(Math.abs(b[0]-a[0])/2),Math.abs(b[1]-a[1]));
+      for(let step=1;step<=steps;step++)coordinates.push([
+        a[0]+(b[0]-a[0])*step/steps,
+        Math.round(a[1]+(b[1]-a[1])*step/steps), b[2]||210]);
     }
+    route.push(...coordinates.map(platform));
+    level.detours.forEach((detour,id)=>{
+      const anchor=coordinates.findIndex(p=>p[0]===detour.at[0]&&p[1]===detour.at[1]);
+      const shelves=detour.path.map(p=>({...platform([...p,180]),branch:true}));
+      branches.push({id,anchor,platforms:shelves});
+      const last=shelves.at(-1);
+      keys.push({id,x:last.x+(last.w-26)/2,y:last.y-46,w:26,h:30,collected:false});
+      const next=route[anchor+2],direction=Math.sign(next.x-route[anchor].x);
+      gates.push({id,x:next.x+(direction>0?145:35),y:next.y-100,w:18,h:100,open:false});
+    });
     const platforms=[...route,...branches.flatMap(b=>b.platforms)].sort((a,b)=>a.y-b.y);
     const first=route[0], top=route.at(-1);
     const enemies = route.flatMap((p,i) => i>2 && i<route.length-1 && (i+index)%4===0 ?

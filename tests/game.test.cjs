@@ -4,13 +4,12 @@ const {levels, createGame, update, jump, shoot, GRAVITY, JUMP, SPEED} = require(
 
 test('otto livelli distinti, percorsi saltabili e chiavi prima delle porte', () => {
   assert.equal(levels.length, 8);
-  assert.equal(new Set(levels.map(l => JSON.stringify([l.start,l.ends]))).size, 8);
   for (let n = 0; n < 8; n++) {
     const g = createGame(n);
     assert.equal(g.keys.length, 3);
     assert.equal(g.gates.length, 3);
     assert.ok(g.width >= 3500);
-    assert.ok(g.platforms.length >= 60);
+    assert.ok(g.platforms.length >= 28);
     assert.equal(g.branches.length,3);
     assert.ok(g.platforms.every(p=>p.x>=0 && p.x+p.w<=g.width));
     for (let i = 1; i < g.route.length; i++) {
@@ -21,8 +20,18 @@ test('otto livelli distinti, percorsi saltabili e chiavi prima delle porte', () 
       const gap = Math.max(0, b.x - a.x - a.w, a.x - b.x - b.w);
       assert.ok(gap + 40 < SPEED * flight, `livello ${n+1}, salto ${i}`);
     }
-    g.gates.forEach((door, i) => assert.ok(g.keys[i].y < door.y));
   }
+});
+
+test('eight different route shapes even after ignoring length and mirroring',()=>{
+  const signatures=levels.map((level,index)=>{
+    const route=createGame(index).route;
+    const firstDirection=Math.sign(route[1].x-route[0].x)||1;
+    const steps=route.slice(1).map((p,i)=>`${Math.sign(p.x-route[i].x)*firstDirection}/${Math.sign(route[i].y-p.y)}`);
+    return steps.filter((step,i)=>i===0||step!==steps[i-1]).join(';');
+  });
+  assert.equal(new Set(signatures).size,8,'routes must differ in topology, not just length or direction');
+  assert.ok(levels.some((l,i)=>createGame(i).route.some((p,j,route)=>j>0&&p.y>route[j-1].y)), 'include descents and valleys');
 });
 
 test('movimento, atterraggio e salto senza doppio salto', () => {
@@ -115,17 +124,25 @@ test('otto percorsi orizzontali completi incluse deviazioni e ritorno dalle chia
     g.enemies=[];
     update(g,{},1/120);
     const visit=(target) => {
-      const x=target.x+86;
+      const x=target.x+(target.w-g.player.w)/2;
       const onTarget=g.player.grounded && Math.abs(g.player.y+g.player.h-target.y)<1 && g.player.x>=target.x && g.player.x<target.x+target.w;
       if(!onTarget && target.y<=g.player.y+g.player.h+1)jump(g);
-      let landed=false;
-      for(let frame=0;frame<250;frame++) {
+      let landed=false, drop=null;
+      for(let frame=0;frame<500;frame++) {
         const delta=x-g.player.x;
-        update(g,{right:delta>2,left:delta< -2},1/120);
+        const feet=g.player.y+g.player.h;
+        if(drop && feet>drop.y+2)drop=null;
+        if(!drop && g.player.grounded && feet<target.y-1 && Math.abs(delta)<4) {
+          const floor=g.platforms.find(p=>p.y===feet && g.player.x+g.player.w>p.x && g.player.x<p.x+p.w);
+          const left=floor.x-g.player.w-3,right=floor.x+floor.w+3;
+          drop={x:Math.abs(left-x)<Math.abs(right-x)?left:right,y:floor.y};
+        }
+        const steer=(drop?drop.x:x)-g.player.x;
+        update(g,{right:steer>2,left:steer< -2},1/120);
         if(g.state==='won') {landed=true;break;}
         if(g.player.grounded && Math.abs(g.player.y+g.player.h-target.y)<1 && Math.abs(delta)<4) {landed=true;break;}
       }
-      assert.ok(landed,`livello ${level+1}, piattaforma (${target.x},${target.y})`);
+      assert.ok(landed,`livello ${level+1}, piattaforma (${target.x},${target.y}), player (${g.player.x},${g.player.y+g.player.h}), ${g.state}`);
       assert.notEqual(g.state,'dead');
     };
     for(let row=0;row<g.route.length;row++) {

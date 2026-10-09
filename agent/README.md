@@ -6,9 +6,10 @@ Read `README.md` for controls, rules, credits and current limitations.
 ## Structure and runtime
 
 - `index.html` and `style.css`: English interface, HUD, overlays, animated logo and touch controls.
-- `engine.js`: eight level definitions and a DOM-independent engine. Corridors
-  are described by a starting column and each floor's endpoint; three side
-  routes hold the keys. Geometry includes `route`, `branches` and `platforms`.
+- `engine.js`: eight level definitions and a DOM-independent engine. Each arena has an authored waypoint path
+  and three explicit key detours. Grid columns are 130 units apart and rows
+  are 105 units apart; main segments are filled with reachable platforms
+  at most two columns and one row apart. Narrow islands use 150-unit shelves. Geometry includes `route`, `branches` and `platforms`.
   Platforms are sorted by height so landing selects the first crossed surface.
   The same API is exported through CommonJS in Node and `window.Miniduck` in the browser.
 - `game.js`: loads six walking images and `assets/salto.png`, handles input,
@@ -25,7 +26,9 @@ Read `README.md` for controls, rules, credits and current limitations.
   interaction needed for playback. Do not restart gameplay music between arenas.
 - `tests/game.test.cjs`: physics, combat, keys/gates, acid, pause and traversal
   of every arena including side routes and returns. Traversal isolates geometry
-  by removing enemies; combat is tested separately.
+  by removing enemies; combat is tested separately. The traversal driver walks
+  off overlapping upper shelves before returning to a lower target. A shape
+  regression test rejects routes differing only in length or mirroring.
 - `tests/browser.py`: Chrome/Playwright checks English menus, controls, horizontal
   scrolling, all arena transitions, ending, retries and three viewport sizes.
 - `tests/audio.py`: local audio decoding and the lifecycle of both tracks in Chrome.

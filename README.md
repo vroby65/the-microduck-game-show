@@ -35,8 +35,9 @@ available on pause and end-of-arena screens.
 
 ## The show
 
-Explore four or five long horizontal corridors connected by climbing sections.
-Each arena is 3910–4950 world units wide, spanning more than four screens.
+Explore eight individually designed routes through ramps, towers, valleys,
+loops, floating islands and staggered galleries. Each arena is 4220–5000 world
+units wide, spanning more than four screens.
 Find the three keys on side routes marked by gold platforms, then return to the
 main route. Each key opens the matching gate; all three are needed to unlock
 the exit. The camera follows both axes, and the map shows your position,
@@ -50,14 +51,14 @@ Score comes from keys, destroyed drones and an exit/time bonus.
 The arenas have distinct routes and colors, with progressively faster acid.
 From arena five onward, drones take two shots to destroy.
 
-1. The Audition
-2. Steel and Beak
-3. The Foundry
-4. Toxic Circuit
-5. Ghost Frequency
-6. Cryogenic Chamber
-7. No Commercial Breaks
-8. The Grand Finale
+1. The Audition — diagonal ramps and sky bridges
+2. Steel and Beak — three zigzag towers linked by bridges
+3. The Foundry — ridges, valleys and an upper return route
+4. Toxic Circuit — an outer loop and an inner switchback
+5. Ghost Frequency — narrow floating islands with climbs and descents
+6. Cryogenic Chamber — staggered galleries and unequal switchbacks
+7. No Commercial Breaks — a long rollercoaster leading to upper terraces
+8. The Grand Finale — crossing routes and a final climb
 
 Miniduck has six walking poses and a dedicated six-pose jump animation:
 takeoff, ascent, apex, descent, landing and recovery. The title screen features
@@ -87,7 +88,7 @@ generation prompt and provenance are in `assets/salto.png`,
 
 ## Tests
 
-Physics, combat, keys, acid and full traversal of all eight arenas, including
+Distinct route shapes, physics, combat, keys, acid and full traversal of all eight arenas, including
 key detours and return routes:
 
 ```sh
