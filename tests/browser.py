@@ -10,7 +10,7 @@ with sync_playwright() as p:
         page.on('pageerror', lambda error: errors.append(str(error)))
         page.goto((root / 'index.html').as_uri())
         page.wait_for_function('ready')
-        assert page.title() == 'The Miniduck Game Show'
+        assert page.title() == 'The Microduck Game Show'
         assert page.locator('html').get_attribute('lang') == 'en'
         assert 'ENTER THE ARENA' in page.locator('#play').inner_text()
         assert 'PLAY THE THEME' in page.locator('#listen').inner_text()
@@ -58,7 +58,7 @@ with sync_playwright() as p:
                 game.enemies = [];
                 for (const key of game.keys) {
                     game.player.x = key.x-10; game.player.y = key.y-10;
-                    Miniduck.update(game, {}, 0);
+                    Microduck.update(game, {}, 0);
                 }
                 game.player.x = game.exit.x; game.player.y = game.exit.y;
             }''')
@@ -66,7 +66,7 @@ with sync_playwright() as p:
             assert page.evaluate('game.index') == level
             assert page.locator('#arena').inner_text() == f'{level+1:02d} / 08'
             if level == 7:
-                assert page.locator('#overlay-title').inner_text() == 'Miniduck wins the show!'
+                assert page.locator('#overlay-title').inner_text() == 'Microduck wins the show!'
             page.locator('#play').click()
         assert page.evaluate('game.index') == 0
         assert page.evaluate('game.score') == 0
@@ -95,7 +95,7 @@ with sync_playwright() as p:
             page.evaluate("""() => {
                 game.enemies=[];
                 const key=game.keys[0];game.player.x=key.x;game.player.y=key.y;
-                Miniduck.update(game,{},0);
+                Microduck.update(game,{},0);
                 game.time=45;game.acid-=100;game.player.y=game.acid;
             }""")
             page.wait_for_function(f"game.state === 'playing' && game.player.hp === {hp} && game.time < 1")

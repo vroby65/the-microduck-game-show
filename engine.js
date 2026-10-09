@@ -130,5 +130,5 @@
     }
   }
   const api={levels,createGame,update,jump,shoot,WIDTH,GRAVITY,JUMP,SPEED,overlap};
-  if(typeof module!=='undefined') module.exports=api; else root.Miniduck=api;
+  if(typeof module!=='undefined') module.exports=api; else root.Microduck=api;
 })(typeof window!=='undefined'?window:globalThis);

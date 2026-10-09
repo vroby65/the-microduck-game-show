@@ -11,7 +11,7 @@ Read `README.md` for controls, rules, credits and current limitations.
   are 105 units apart; main segments are filled with reachable platforms
   at most two columns and one row apart. Narrow islands use 150-unit shelves. Geometry includes `route`, `branches` and `platforms`.
   Platforms are sorted by height so landing selects the first crossed surface.
-  The same API is exported through CommonJS in Node and `window.Miniduck` in the browser.
+  The same API is exported through CommonJS in Node and `window.Microduck` in the browser.
 - `game.js`: loads six walking images and `assets/salto.png`, handles input,
   audio and campaign progression, advances physics at 1/120 s and draws with Canvas.
   `cameraX` and `camera` are camera coordinates. The viewport is 900×540;
@@ -73,7 +73,7 @@ verification commands and publishing changes.
 
 ## Publishing
 
-The public repository is `vroby65/the-miniduck-game-show` on GitHub. GitHub Pages
+The public repository is `vroby65/the-microduck-game-show` on GitHub. GitHub Pages
 serves the root of `main`; `.nojekyll` selects plain static hosting. No custom
 build workflow or runtime dependencies are needed. After an authorized publish,
 verify the Pages build and the deployed game, including image and music requests.

@@ -35,7 +35,7 @@ with sync_playwright() as p:
     page.evaluate('music.ingame.currentTime = 12')
     page.evaluate('''() => {
         game.enemies = [];
-        for(const key of game.keys){game.player.x=key.x;game.player.y=key.y;Miniduck.update(game,{},0);}
+        for(const key of game.keys){game.player.x=key.x;game.player.y=key.y;Microduck.update(game,{},0);}
         game.player.x=game.exit.x;game.player.y=game.exit.y;
     }''')
     page.wait_for_function("game.state === 'won' && !overlay.hidden")

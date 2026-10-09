@@ -3,7 +3,7 @@ const canvas=document.querySelector('#game'), ctx=canvas.getContext('2d');
 const overlay=document.querySelector('#overlay'), play=document.querySelector('#play');
 const input={left:false,right:false,fire:false};
 const keyColors=['#59d9e8','#ffb95c','#e29aff'];
-let game=Miniduck.createGame(0), started=false, ready=false, camera=game.height-540, cameraX=0;
+let game=Microduck.createGame(0), started=false, ready=false, camera=game.height-540, cameraX=0;
 let campaignScore=0, soundEnabled=true, audioUnlocked=false, audioContext, previousTime=0, accumulator=0, titleTime=0;
 const music={title:new Audio('assets/music/title.ogg'),ingame:new Audio('assets/music/ingame.ogg')};
 let activeTrack=null;
@@ -45,7 +45,7 @@ function tone(frequency,duration=.07) {
 }
 function clearInput(){input.left=input.right=input.fire=false;}
 function startLevel(index,score=0,hp=3) {
-  clearInput();game=Miniduck.createGame(index,score);game.player.hp=hp;campaignScore=score;
+  clearInput();game=Microduck.createGame(index,score);game.player.hp=hp;campaignScore=score;
   camera=game.height-540;cameraX=Math.max(0,Math.min(game.width-900,game.player.x-450));
   accumulator=0;started=true;overlay.hidden=true;unlockAudio();tone(440,.12);updateHud();
 }
@@ -74,7 +74,7 @@ function togglePause() {
   } else if(game.state==='paused') {game.state='playing';overlay.hidden=true;accumulator=0;}
   syncMusic();
 }
-function doJump() {const grounded=game.player.grounded;Miniduck.jump(game);if(grounded&&game.state==='playing')tone(260,.09);}
+function doJump() {const grounded=game.player.grounded;Microduck.jump(game);if(grounded&&game.state==='playing')tone(260,.09);}
 play.addEventListener('click',action);
 document.querySelector('#pause').addEventListener('click',togglePause);
 document.querySelector('#sound').addEventListener('click',event=>{
@@ -86,10 +86,10 @@ document.querySelector('#listen').addEventListener('click',()=>{
   document.querySelector('#sound').setAttribute('aria-pressed','true');unlockAudio();
 });
 document.querySelector('#back-title').addEventListener('click',()=>{
-  clearInput();started=false;game=Miniduck.createGame(0);campaignScore=0;
+  clearInput();started=false;game=Microduck.createGame(0);campaignScore=0;
   overlay.classList.add('intro');overlay.hidden=false;
   document.querySelector('#back-title').hidden=true;
-  document.querySelector('#overlay-label').textContent='MINIDUCK TELEVISION PRESENTS';
+  document.querySelector('#overlay-label').textContent='MICRODUCK TELEVISION PRESENTS';
   document.querySelector('#overlay-text').textContent='Explore the arenas, destroy the drones and find all three keys. Reach the exit before the acid catches you.';
   play.innerHTML='ENTER THE ARENA <span>→</span>';updateHud();unlockAudio();
 });
@@ -229,7 +229,7 @@ function drawTitle() {
     ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(900,y);ctx.stroke();
   }
   ctx.shadowBlur=18;ctx.shadowColor='#8b98ff';rect(0,365,900,2,'#7b88d9');ctx.shadowBlur=0;
-  // Miniduck cammina sul palco anche quando il giocatore resta nel menu.
+  // Microduck cammina sul palco anche quando il giocatore resta nel menu.
   if(ready) {
     const frame=Math.floor(t*9)%6;
     ctx.save();ctx.translate(150,466+Math.sin(t*3)*4);
@@ -245,7 +245,7 @@ function frame(time) {
   if(started&&game.state==='playing') {
     const oldHp=game.player.hp,oldKeys=game.collected.size;
     accumulator+=dt;
-    while(accumulator>=1/120){Miniduck.update(game,input,1/120);accumulator-=1/120;}
+    while(accumulator>=1/120){Microduck.update(game,input,1/120);accumulator-=1/120;}
     if(game.state==='respawn')startLevel(game.index,campaignScore,game.player.hp);
     if(oldHp>game.player.hp)tone(90,.18);
     if(oldKeys<game.collected.size)tone(880,.15);
@@ -256,7 +256,7 @@ function frame(time) {
     if(game.state==='dead')showOverlay('GAME OVER','The show is over.','Restart from arena one with full energy and a fresh score.','RESTART THE SHOW');
     if(game.state==='won') {
       tone(660,.3);
-      showOverlay(game.index===7?'EIGHT ARENAS. SHOW COMPLETE.':'ARENA CLEARED',game.index===7?'Miniduck wins the show!':'On to the next round.',`Score: ${game.score} · Arena time: ${game.time.toFixed(1)} s`,game.index===7?'RESTART THE SHOW':'NEXT ARENA');
+      showOverlay(game.index===7?'EIGHT ARENAS. SHOW COMPLETE.':'ARENA CLEARED',game.index===7?'Microduck wins the show!':'On to the next round.',`Score: ${game.score} · Arena time: ${game.time.toFixed(1)} s`,game.index===7?'RESTART THE SHOW':'NEXT ARENA');
     }
   }
   draw();requestAnimationFrame(frame);

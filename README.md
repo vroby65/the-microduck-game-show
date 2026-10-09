@@ -1,4 +1,4 @@
-# The Miniduck Game Show
+# The Microduck Game Show
 
 **Eight worlds. No second place.**
 
@@ -6,7 +6,7 @@ A browser action platformer inspired by *The Killing Game Show* on the Amiga.
 Guide a tiny duck robot through eight sprawling arenas, shoot hostile drones,
 find the keys and escape before the rising acid catches you.
 
-**[Play the game](https://vroby65.github.io/the-miniduck-game-show/)**
+**[Play the game](https://vroby65.github.io/the-microduck-game-show/)**
 
 ## Play locally
 
@@ -65,7 +65,7 @@ From arena five onward, drones take two shots to destroy.
 7. No Commercial Breaks — a long rollercoaster leading to upper terraces
 8. The Grand Finale — crossing routes and a final climb
 
-Miniduck has six walking poses and a dedicated six-pose jump animation:
+Microduck has six walking poses and a dedicated six-pose jump animation:
 takeoff, ascent, apex, descent, landing and recovery. The title screen features
 an animated metallic logo, stars, a moving perspective floor and a walking robot.
 
@@ -78,7 +78,7 @@ wall climbing or attempt replays in this version.
 - Original Amiga tracks: **Title Screen** (2:25) and **In-Game** (4:22), by **Ray Norrish**.
 - OGG recordings: **IgoreshaZhu / Video Game Music Preservation Foundation**.
   [Soundtrack source](https://www.vgmpf.com/Wiki/index.php?title=The_Killing_Game_Show_(AMI)).
-- Miniduck artwork: original graphics generated with the built-in ImageGen tool,
+- Microduck artwork: original graphics generated with the built-in ImageGen tool,
   using the [Pollen Robotics Microduck](https://pollen-robotics.com/microduck/) as
   a character reference.
 
