@@ -36,14 +36,18 @@ Read `README.md` for controls, rules, credits and current limitations.
 
 World y increases downward. Platforms can be crossed from below; landing compares
 previous feet height with the platform height. States are `playing`, `paused`,
-`dead` and `won`; only `playing` advances physics. `player.airTime` and
+`respawn`, `dead` and `won`; only `playing` advances physics. `player.airTime` and
 `player.landTime` are animation timers and must not change trajectories or collisions.
 Jumping resets both. Landing triggers 0.18 s of visual recovery; jumping again is
 already allowed during recovery. All three side-route keys must be reachable
 before their matching gates and are required to exit. Acid starts rising after
-18 s. A new arena restores energy. Game over restarts the campaign at arena one
+18 s. Acid costs one energy point and sets `respawn` while energy remains;
+`frame` immediately restarts the same arena with its entry score and remaining
+energy. This resets keys, enemies, acid and cameras. At zero energy acid sets
+`dead`. Acid is checked before combat to avoid double damage on the same fall.
+A new arena restores energy. Game over restarts the campaign at arena one
 with zero score, full energy and no keys via the button, Enter or R. During play
-or pause, R retries the current arena with its entry score.
+or pause, R retries the current arena with its entry score and remaining energy.
 
 ## Verification and maintenance
 

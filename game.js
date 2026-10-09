@@ -44,8 +44,8 @@ function tone(frequency,duration=.07) {
   oscillator.start();oscillator.stop(audioContext.currentTime+duration);
 }
 function clearInput(){input.left=input.right=input.fire=false;}
-function startLevel(index,score=0) {
-  clearInput();game=Miniduck.createGame(index,score);campaignScore=score;
+function startLevel(index,score=0,hp=3) {
+  clearInput();game=Miniduck.createGame(index,score);game.player.hp=hp;campaignScore=score;
   camera=game.height-540;cameraX=Math.max(0,Math.min(game.width-900,game.player.x-450));
   accumulator=0;started=true;overlay.hidden=true;unlockAudio();tone(440,.12);updateHud();
 }
@@ -101,7 +101,7 @@ window.addEventListener('keydown',event=>{
   if(event.code==='Enter')action();
   if(event.code==='KeyP')togglePause();
   if(event.code==='KeyR'&&started) {
-    if(game.state==='dead')startLevel(0);else startLevel(game.index,campaignScore);
+    if(game.state==='dead')startLevel(0);else startLevel(game.index,campaignScore,game.player.hp);
   }
   if(game.state!=='playing'||!started)return;
   if(bindings[event.code])input[bindings[event.code]]=true;
@@ -246,6 +246,7 @@ function frame(time) {
     const oldHp=game.player.hp,oldKeys=game.collected.size;
     accumulator+=dt;
     while(accumulator>=1/120){Miniduck.update(game,input,1/120);accumulator-=1/120;}
+    if(game.state==='respawn')startLevel(game.index,campaignScore,game.player.hp);
     if(oldHp>game.player.hp)tone(90,.18);
     if(oldKeys<game.collected.size)tone(880,.15);
     if(input.fire && game.player.cooldown>.18)tone(150,.035);

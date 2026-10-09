@@ -99,6 +99,9 @@
         p.y=floor.y-p.h;p.vy=0;p.grounded=true;break;
       }
     }
+    if(p.y+p.h>=g.acid) {
+      p.hp--;g.state=p.hp>0?'respawn':'dead';return;
+    }
     for(const key of g.keys) if(!key.collected && overlap(p,key)) {
       key.collected=true;g.collected.add(key.id);g.gates[key.id].open=true;g.score+=250;
       burst(g,key.x,key.y,['#59d9e8','#ffb95c','#e29aff'][key.id]);
@@ -122,7 +125,6 @@
     g.bullets=g.bullets.filter(b=>b.life>0);
     for(const particle of g.particles) {particle.x+=particle.vx*dt;particle.y+=particle.vy*dt;particle.life-=dt;}
     g.particles=g.particles.filter(particle=>particle.life>0);
-    if(p.y+p.h>=g.acid) g.state='dead';
     if(g.state==='playing' && g.collected.size===3 && overlap(p,g.exit)) {
       g.state='won';g.score+=1000+Math.max(0,Math.round(120-g.time))*10;
     }

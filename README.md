@@ -43,11 +43,14 @@ main route. Each key opens the matching gate; all three are needed to unlock
 the exit. The camera follows both axes, and the map shows your position,
 remaining keys and the visible area.
 
-You have three energy points per arena. Acid is instantly lethal and starts
-rising after eighteen seconds. Losing focus automatically pauses the game.
+You have three energy points per arena. Acid starts rising after eighteen
+seconds. Falling into it costs one energy point and immediately restarts the
+same arena with your remaining energy and its entry score. Keys, gates, enemies
+and acid reset. Losing the last energy point causes game over. Losing focus
+automatically pauses the game.
 After a game over, restart from arena one with full energy and a score of zero.
 The restart button, Enter and R all start a new campaign. During play or pause,
-R retries the current arena with its entry score.
+R retries the current arena with its entry score and remaining energy.
 Score comes from keys, destroyed drones and an exit/time bonus.
 
 The arenas have distinct routes and colors, with progressively faster acid.

@@ -90,10 +90,29 @@ with sync_playwright() as p:
             assert page.evaluate('game.player.hp') == 3
             assert page.evaluate('game.collected.size') == 0
             assert page.evaluate('game.state') == 'playing'
-        page.evaluate('startLevel(3, 2300); game.player.y = game.acid')
+        page.evaluate('startLevel(5, 2300)')
+        for hp in [2, 1]:
+            page.evaluate("""() => {
+                game.enemies=[];
+                const key=game.keys[0];game.player.x=key.x;game.player.y=key.y;
+                Miniduck.update(game,{},0);
+                game.time=45;game.acid-=100;game.player.y=game.acid;
+            }""")
+            page.wait_for_function(f"game.state === 'playing' && game.player.hp === {hp} && game.time < 1")
+            assert page.evaluate('game.index === 5 && game.score === 2300')
+            assert page.evaluate('game.collected.size === 0 && game.gates.every(g => !g.open)')
+            assert page.evaluate('Math.abs(game.player.x-game.route[0].x-35)<1')
+            assert page.evaluate('game.acid === game.height-30 && cameraX > 3000')
+            assert page.locator('#overlay').is_hidden()
+            assert page.evaluate('!music.ingame.paused')
+        page.evaluate('document.activeElement.blur()')
+        page.keyboard.press('KeyR')
+        assert page.evaluate('game.index === 5 && game.player.hp === 1')
+        page.evaluate('game.player.y=game.acid')
         page.wait_for_function("game.state === 'dead' && !overlay.hidden")
+        assert page.evaluate('game.player.hp === 0')
         page.locator('#play').click()
-        assert page.evaluate('game.index === 0 && game.score === 0')
+        assert page.evaluate('game.index === 0 && game.score === 0 && game.player.hp === 3')
         page.wait_for_timeout(100)
         if width == 390:
             assert page.locator('.touch').is_visible()

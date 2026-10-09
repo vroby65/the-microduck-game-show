@@ -111,7 +111,8 @@ test('liquido, danni, invulnerabilità e pausa', () => {
   assert.equal(g.player.hp, 2);
   g.player.y = g.acid;
   update(g, {}, 0);
-  assert.equal(g.state, 'dead');
+  assert.equal(g.player.hp, 1);
+  assert.equal(g.state, 'respawn');
   const paused = createGame(0); paused.state = 'paused';
   update(paused, {right:true}, .1);
   assert.equal(paused.time, 0);
@@ -166,4 +167,19 @@ test('i limiti orizzontali appartengono al mondo, non allo schermo',()=>{
   assert.ok(g.player.x>1700);
   g.player.x=g.width-40;update(g,{right:true},.1);
   assert.equal(g.player.x,g.width-g.player.w-20);
+});
+
+
+test('acid costs one energy point per fall, ignores invulnerability and ends the show at zero',()=>{
+  const g=createGame(4,4200);
+  for(let hp=3;hp>=1;hp--) {
+    g.state='playing';g.player.hp=hp;g.player.invincible=1.6;
+    g.player.x=20;g.player.y=g.acid;
+    g.enemies=[{x:20,y:g.acid,base:20,phase:0,hp:1,range:0}];
+    update(g,{},1/120);
+    assert.equal(g.player.hp,hp-1);
+    assert.equal(g.state,hp===1?'dead':'respawn');
+    update(g,{},1/120);
+    assert.equal(g.player.hp,hp-1);
+  }
 });
