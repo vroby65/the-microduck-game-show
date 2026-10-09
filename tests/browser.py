@@ -11,6 +11,11 @@ with sync_playwright() as p:
         page.goto((root / 'index.html').as_uri())
         page.wait_for_function('ready')
         assert page.title() == 'The Microduck Game Show'
+        assert page.locator('link[rel="icon"]').get_attribute('href') == 'assets/favicon.svg'
+        assert page.evaluate("""async () => {
+            const icon=new Image();icon.src=document.querySelector('link[rel=\"icon\"]').href;
+            await icon.decode();return icon.naturalWidth===64 && icon.naturalHeight===64;
+        }""")
         assert page.locator('html').get_attribute('lang') == 'en'
         assert 'ENTER THE ARENA' in page.locator('#play').inner_text()
         assert 'PLAY THE THEME' in page.locator('#listen').inner_text()

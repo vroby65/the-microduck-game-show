@@ -21,6 +21,7 @@ Read `README.md` for controls, rules, credits and current limitations.
   cells in a 3×2 grid. Walking and the title use the original walking images.
 - `assets/`: original images and provenance. Do not modify the external source
   projects these images were copied from.
+  `favicon.svg` is a small vector portrait of Microduck used as the browser tab icon.
 - `assets/music/`: original Amiga title/gameplay OGG recordings with provenance.
   `syncMusic` handles looping, track changes, pause, mute and the initial user
   interaction needed for playback. Do not restart gameplay music between arenas.
