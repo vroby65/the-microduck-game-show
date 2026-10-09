@@ -1,0 +1,25 @@
+{
+  "tool": "image_gen.imagegen integrato",
+  "reference": "assets/cammina-01.png",
+  "referenceRole": "identità e stile del personaggio",
+  "file": "salto.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "grid": [
+    3,
+    2
+  ],
+  "poses": [
+    "stacco",
+    "salita",
+    "apice",
+    "discesa",
+    "atterraggio",
+    "recupero"
+  ],
+  "processing": "PNG originale copiato senza modifiche; celle lette dal renderer Canvas, trasparenza conservata",
+  "prompt": "salto-prompt.txt",
+  "sha256": "3f98655b376a386fc41d987b9776c7e3c16c67c29fe70a379d916156a062a165"
+}

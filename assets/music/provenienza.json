@@ -1,0 +1,23 @@
+{
+  "game": "The Killing Game Show",
+  "platform": "Amiga",
+  "composer": "Ray Norrish",
+  "recordingCredit": "IgoreshaZhu, VGMPF (conversione OGG con foobar2000)",
+  "sourcePage": "https://www.vgmpf.com/Wiki/index.php?title=The_Killing_Game_Show_(AMI)",
+  "tracks": [
+    {
+      "file": "title.ogg",
+      "role": "title",
+      "name": "Title Screen",
+      "url": "https://www.vgmpf.com/Wiki/images/5/5d/02_-_The_Killing_Game_Show_-_AMI_-_Title_Screen.ogg",
+      "sha256": "92e2f39371ec9a6895ce3e12aa7cc67f35fb397d567da7c2372b8095dc47b86d"
+    },
+    {
+      "file": "ingame.ogg",
+      "role": "gameplay",
+      "name": "In-Game",
+      "url": "https://www.vgmpf.com/Wiki/images/8/8e/03_-_The_Killing_Game_Show_-_AMI_-_In-Game.ogg",
+      "sha256": "88b21fcedac28180708f779e22c109d44ac490443c51f890cafb03ad874c8bd3"
+    }
+  ]
+}
