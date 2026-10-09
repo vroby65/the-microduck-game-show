@@ -26,7 +26,7 @@ Audio playback begins after this click or after starting a game.
 | Jump | Space or up arrow |
 | Shoot | X or J; hold for continuous fire |
 | Pause / resume | P |
-| Retry the current arena | R |
+| Retry arena / restart after game over | R |
 | Start / retry / next arena | Enter |
 
 Touch devices have on-screen movement, jump and fire buttons.
@@ -45,7 +45,9 @@ remaining keys and the visible area.
 
 You have three energy points per arena. Acid is instantly lethal and starts
 rising after eighteen seconds. Losing focus automatically pauses the game.
-After a defeat, retry the same arena with the score you had when entering it.
+After a game over, restart from arena one with full energy and a score of zero.
+The restart button, Enter and R all start a new campaign. During play or pause,
+R retries the current arena with its entry score.
 Score comes from keys, destroyed drones and an exit/time bonus.
 
 The arenas have distinct routes and colors, with progressively faster acid.

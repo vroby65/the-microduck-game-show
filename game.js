@@ -62,7 +62,7 @@ function showOverlay(label,title,text,button) {
 function action() {
   if(!ready)return;
   if(!started)startLevel(0);
-  else if(game.state==='dead')startLevel(game.index,campaignScore);
+  else if(game.state==='dead')startLevel(0);
   else if(game.state==='won') {
     if(game.index===7)startLevel(0);else startLevel(game.index+1,game.score);
   } else if(game.state==='paused')togglePause();
@@ -100,7 +100,9 @@ window.addEventListener('keydown',event=>{
   if(event.repeat)return;
   if(event.code==='Enter')action();
   if(event.code==='KeyP')togglePause();
-  if(event.code==='KeyR'&&started)startLevel(game.index,campaignScore);
+  if(event.code==='KeyR'&&started) {
+    if(game.state==='dead')startLevel(0);else startLevel(game.index,campaignScore);
+  }
   if(game.state!=='playing'||!started)return;
   if(bindings[event.code])input[bindings[event.code]]=true;
   if(event.code==='Space'||event.code==='ArrowUp')doJump();
@@ -250,7 +252,7 @@ function frame(time) {
     camera=Math.max(0,Math.min(game.height-540,game.player.y-320));
     cameraX=Math.max(0,Math.min(game.width-900,game.player.x+game.player.w/2-450));
     updateHud();
-    if(game.state==='dead')showOverlay('THE CROWD WANTS AN ENCORE','Take two. Try again.','Retry this arena. Learn the route and stay above the acid.','TRY AGAIN');
+    if(game.state==='dead')showOverlay('GAME OVER','The show is over.','Restart from arena one with full energy and a fresh score.','RESTART THE SHOW');
     if(game.state==='won') {
       tone(660,.3);
       showOverlay(game.index===7?'EIGHT ARENAS. SHOW COMPLETE.':'ARENA CLEARED',game.index===7?'Miniduck wins the show!':'On to the next round.',`Score: ${game.score} · Arena time: ${game.time.toFixed(1)} s`,game.index===7?'RESTART THE SHOW':'NEXT ARENA');

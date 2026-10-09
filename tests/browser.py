@@ -70,11 +70,30 @@ with sync_playwright() as p:
             page.locator('#play').click()
         assert page.evaluate('game.index') == 0
         assert page.evaluate('game.score') == 0
-        page.evaluate('game.player.y = game.acid')
+        # Exhaust health in later arenas and exercise every game-over restart control.
+        for restart in ['button', 'Enter', 'KeyR']:
+            page.evaluate("""() => {
+                startLevel(4, 4200);
+                game.player.hp = 1;
+                const p = game.player;
+                game.enemies = [{x:p.x,y:p.y,base:p.x,phase:0,hp:1,range:0}];
+            }""")
+            page.wait_for_function("game.state === 'dead' && !overlay.hidden")
+            assert page.evaluate('game.player.hp') == 0
+            if restart == 'button':
+                page.locator('#play').click()
+            else:
+                page.evaluate('document.activeElement.blur()')
+                page.keyboard.press(restart)
+            assert page.evaluate('game.index') == 0
+            assert page.evaluate('game.score') == 0
+            assert page.evaluate('game.player.hp') == 3
+            assert page.evaluate('game.collected.size') == 0
+            assert page.evaluate('game.state') == 'playing'
+        page.evaluate('startLevel(3, 2300); game.player.y = game.acid')
         page.wait_for_function("game.state === 'dead' && !overlay.hidden")
-        assert page.locator('#overlay-title').inner_text() == 'Take two. Try again.'
-        page.keyboard.press('KeyR')
-        assert page.evaluate('game.state') == 'playing'
+        page.locator('#play').click()
+        assert page.evaluate('game.index === 0 && game.score === 0')
         page.wait_for_timeout(100)
         if width == 390:
             assert page.locator('.touch').is_visible()

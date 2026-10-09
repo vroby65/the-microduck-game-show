@@ -41,8 +41,9 @@ previous feet height with the platform height. States are `playing`, `paused`,
 Jumping resets both. Landing triggers 0.18 s of visual recovery; jumping again is
 already allowed during recovery. All three side-route keys must be reachable
 before their matching gates and are required to exit. Acid starts rising after
-18 s. A new arena restores energy. Retrying restores the arena's entry score
-so repeated attempts cannot accumulate points.
+18 s. A new arena restores energy. Game over restarts the campaign at arena one
+with zero score, full energy and no keys via the button, Enter or R. During play
+or pause, R retries the current arena with its entry score.
 
 ## Verification and maintenance
 
